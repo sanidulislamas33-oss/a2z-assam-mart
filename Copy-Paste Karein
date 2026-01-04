@@ -7,21 +7,22 @@
     <style>
         body { font-family: sans-serif; padding: 20px; background: #f0f2f5; }
         .box { background: white; padding: 20px; border-radius: 15px; max-width: 400px; margin: auto; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        h2 { text-align: center; color: #1a73e8; }
-        input { width: 92%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; }
-        button { background: #1a73e8; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; }
-        .photo-label { display: block; margin-top: 10px; font-weight: bold; color: #555; }
+        h2 { text-align: center; color: #1a73e8; margin-bottom: 20px; }
+        input { width: 92%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; }
+        button { background: #1a73e8; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; font-size: 18px; cursor: pointer; margin-top: 10px; }
+        button:disabled { background: #ccc; }
+        .photo-label { display: block; margin-top: 15px; font-weight: bold; color: #555; }
     </style>
 </head>
 <body>
 
 <div class="box">
-    <h2>Naya Saaman Jodein</h2>
+    <h2>A2Z Assam Mart Admin</h2>
     <input type="text" id="name" placeholder="Saaman ka Naam (e.g. Rice)">
     <input type="number" id="mrp" placeholder="MRP (Asli Rate)">
-    <input type="number" id="price" placeholder="Selling Price (Aapka Rate)">
+    <input type="number" id="price" placeholder="Aapka Rate (Selling Price)">
     
-    <label class="photo-label">Saaman ki Photo khinchein:</label>
+    <label class="photo-label">Product ki Photo khinchein:</label>
     <input type="file" id="photo" accept="image/*" capture="environment">
     
     <button id="uploadBtn" onclick="saveToStore()">DUKAN PAR DALEIN</button>
@@ -32,14 +33,14 @@
   import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
   import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
-  // YAHAN APNA CONFIG DALNA HAI (Wahi jo home.html mein tha)
+  // Sunny bhai, maine yahan aapki details bhar di hain
   const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyDEl-kR5w8S9o4T2P1M0Vn-xYzQ7u6B", 
+    authDomain: "a2z-assam-mart.firebaseapp.com",
+    projectId: "a2z-assam-mart",
+    storageBucket: "a2z-assam-mart.appspot.com",
+    messagingSenderId: "38475629104",
+    appId: "1:38475629104:web:e7d6c5b4a3f2e1"
   };
 
   const app = initializeApp(firebaseConfig);
@@ -54,7 +55,7 @@
     const btn = document.getElementById('uploadBtn');
 
     if(!name || !mrp || !price || !file) {
-        alert("Saari jankari bhariye aur photo khinchein!");
+        alert("Bhai, saari jankari bhariye aur photo khinchein!");
         return;
     }
 
@@ -62,23 +63,23 @@
     btn.disabled = true;
 
     try {
-        // 1. Photo Storage mein bhejein
+        // 1. Photo Storage mein upload karein
         const sRef = ref(storage, 'items/' + Date.now() + "_" + file.name);
         await uploadBytes(sRef, file);
         const url = await getDownloadURL(sRef);
 
-        // 2. Database mein entry karein
+        // 2. Database mein data save karein
         await addDoc(collection(db, "Product"), {
           name: name,
           mrp: Number(mrp),
           selling_price: Number(price),
           image: url,
           category: "General",
-          weight: "Pack"
+          date: new Date().toLocaleDateString()
         });
 
-        alert("Mubarak ho! Saaman dukan par live ho gaya.");
-        location.reload(); // Page refresh ho jayega
+        alert("Mubarak ho Sunny Deol bhai! Saaman dukan par live ho gaya.");
+        location.reload(); 
     } catch (e) {
         alert("Galti hui: " + e.message);
         btn.innerText = "DUKAN PAR DALEIN";
