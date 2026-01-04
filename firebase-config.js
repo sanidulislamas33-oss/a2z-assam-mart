@@ -1,0 +1,11 @@
+const firebaseConfig = {
+  apiKey: "AIzaSyCOQiWHTeUhBDbuliTUbw",
+  authDomain: "a2z-assam-mart.firebaseapp.com",
+  projectId: "a2z-assam-mart",
+  storageBucket: "a2z-assam-mart.firebasestorage.app",
+  messagingSenderId: "291553559032",
+  appId: "1:291553559032:web:b1179e4f",
+  measurementId: "G-ZVBN691SCH"
+};
+
+export default firebaseConfig;
