@@ -1,22 +1,91 @@
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Admin - Add Product</title>
+    <title>A2Z Admin - Add Product</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body { font-family: Arial; padding: 20px; background: #f4f4f4; }
-        .form-card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; }
-        button { background: #28a745; color: white; border: none; padding: 15px; width: 100%; border-radius: 5px; cursor: pointer; }
+        body { font-family: sans-serif; padding: 20px; background: #f0f2f5; }
+        .box { background: white; padding: 20px; border-radius: 15px; max-width: 400px; margin: auto; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #1a73e8; }
+        input { width: 92%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; }
+        button { background: #1a73e8; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; }
+        .photo-label { display: block; margin-top: 10px; font-weight: bold; color: #555; }
     </style>
 </head>
 <body>
-    <div class="form-card">
-        <h2>Naya Saaman Jodein</h2>
-        <input type="text" id="pName" placeholder="Product ka Naam">
-        <input type="number" id="pMrp" placeholder="MRP (Asli Daam)">
-        <input type="number" id="pPrice" placeholder="Selling Price (Bechne ka Daam)">
-        <input type="file" id="pImage" accept="image/*">
-        <button onclick="uploadProduct()">Dukan par Daalein (Upload)</button>
-    </div>
+
+<div class="box">
+    <h2>Naya Saaman Jodein</h2>
+    <input type="text" id="name" placeholder="Saaman ka Naam (e.g. Rice)">
+    <input type="number" id="mrp" placeholder="MRP (Asli Rate)">
+    <input type="number" id="price" placeholder="Selling Price (Aapka Rate)">
+    
+    <label class="photo-label">Saaman ki Photo khinchein:</label>
+    <input type="file" id="photo" accept="image/*" capture="environment">
+    
+    <button id="uploadBtn" onclick="saveToStore()">DUKAN PAR DALEIN</button>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+
+  // YAHAN APNA CONFIG DALNA HAI (Wahi jo home.html mein tha)
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const storage = getStorage(app);
+
+  window.saveToStore = async () => {
+    const name = document.getElementById('name').value;
+    const mrp = document.getElementById('mrp').value;
+    const price = document.getElementById('price').value;
+    const file = document.getElementById('photo').files[0];
+    const btn = document.getElementById('uploadBtn');
+
+    if(!name || !mrp || !price || !file) {
+        alert("Saari jankari bhariye aur photo khinchein!");
+        return;
+    }
+
+    btn.innerText = "Uploading... Thoda rukein";
+    btn.disabled = true;
+
+    try {
+        // 1. Photo Storage mein bhejein
+        const sRef = ref(storage, 'items/' + Date.now() + "_" + file.name);
+        await uploadBytes(sRef, file);
+        const url = await getDownloadURL(sRef);
+
+        // 2. Database mein entry karein
+        await addDoc(collection(db, "Product"), {
+          name: name,
+          mrp: Number(mrp),
+          selling_price: Number(price),
+          image: url,
+          category: "General",
+          weight: "Pack"
+        });
+
+        alert("Mubarak ho! Saaman dukan par live ho gaya.");
+        location.reload(); // Page refresh ho jayega
+    } catch (e) {
+        alert("Galti hui: " + e.message);
+        btn.innerText = "DUKAN PAR DALEIN";
+        btn.disabled = false;
+    }
+  };
+</script>
+
 </body>
 </html>
