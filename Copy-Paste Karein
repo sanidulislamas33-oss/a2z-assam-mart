@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin - Add Product</title>
+    <style>
+        body { font-family: Arial; padding: 20px; background: #f4f4f4; }
+        .form-card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; }
+        button { background: #28a745; color: white; border: none; padding: 15px; width: 100%; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="form-card">
+        <h2>Naya Saaman Jodein</h2>
+        <input type="text" id="pName" placeholder="Product ka Naam">
+        <input type="number" id="pMrp" placeholder="MRP (Asli Daam)">
+        <input type="number" id="pPrice" placeholder="Selling Price (Bechne ka Daam)">
+        <input type="file" id="pImage" accept="image/*">
+        <button onclick="uploadProduct()">Dukan par Daalein (Upload)</button>
+    </div>
+</body>
+</html>
