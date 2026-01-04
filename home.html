@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A2Z Assam Mart - Shop</title>
+    <style>
+        body { font-family: 'Poppins', sans-serif; background: #f8f9fa; margin: 0; padding: 20px; }
+        .header { background: #232f3e; color: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .product-card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); text-align: center; }
+        .price { color: #B12704; font-size: 1.2rem; font-weight: bold; }
+        .buy-btn { background: #ffd814; border: 1px solid #fcd200; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; width: 100%; }
+        .buy-btn:hover { background: #f7ca00; }
+        #status { color: green; font-weight: bold; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>A2Z Assam Mart 🛒</h1>
+        <div id="status">Connecting to Inventory...</div>
+    </div>
+
+    <div class="product-grid" id="product-list">
+        <p>Database se products load ho rahe hain...</p>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+    <script src="app-config.js"></script>
+
+    <script>
+        // Check Connection and Load Products
+        if (typeof firebase !== 'undefined') {
+            document.getElementById('status').innerText = "✅ Store is Online";
+
+            // Database se products khinchne ka function
+            db.collection("products").onSnapshot((snapshot) => {
+                const list = document.getElementById('product-list');
+                list.innerHTML = ""; // Clear loading text
+                
+                snapshot.forEach((doc) => {
+                    const data = doc.data();
+                    list.innerHTML += `
+                        <div class="product-card">
+                            <h3>${data.name || 'Assam Special Item'}</h3>
+                            <p class="price">₹${data.price || '0'}</p>
+                            <button class="buy-btn" onclick="alert('Added to Cart!')">Add to Cart</button>
+                        </div>
+                    `;
+                });
+                
+                if(snapshot.empty) {
+                    list.innerHTML = "<h3>Abhi koi product nahi hai. Firebase Console mein 'products' collection banaiye!</h3>";
+                }
+            });
+        }
+    </script>
+</body>
+</html>
