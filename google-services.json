@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "291553559032",
+    "project_id": "a2z-assam-mart",
+    "storage_bucket": "a2z-assam-mart.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:291553559032:android:69568f3340878033d9160d",
+        "android_client_info": {
+          "package_name": "com.atoz.assammart"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALEJUR0gsDUHOp3ySnnaxOKs4xBJYRAo0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
