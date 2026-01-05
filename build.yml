@@ -1,5 +1,4 @@
-
-name: Build_Assam_Mart_Final
+name: Build_Assam_Mart_Final_App
 on:
   push:
     branches: [ main ]
