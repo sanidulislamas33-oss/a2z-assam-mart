@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A2Z Vendor Dashboard</title>
+    <style>
+        body { font-family: sans-serif; background: #f8f9fa; margin: 0; padding: 15px; }
+        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .stats-box { background: #232f3e; color: white; padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; }
+        input, select { width: 95%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; }
+        .btn-request { background: #ffc107; color: black; border: none; width: 100%; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h2>🏪 Vendor Dashboard</h2>
+    <div class="card">
+        <div class="stats-box">
+            <div><small>Aaj ki Sales</small><br><b>₹4,500</b></div>
+            <div><small>Net Profit</small><br><b style="color:#4caf50;">₹1,200</b></div>
+        </div>
+    </div>
+    <div class="card">
+        <h4>➕ Naya Product Jodein</h4>
+        <input type="text" placeholder="Product Name">
+        <input type="number" placeholder="Base Rate">
+        <input type="text" placeholder="SAC/HSN Code">
+        <select><option>GST 0%</option><option>GST 5%</option><option>GST 12%</option></select>
+        <button style="background:#28a745; color:white; border:none; width:100%; padding:12px; border-radius:5px;">Live Karein</button>
+    </div>
+    <div class="card" style="border: 2px solid #ffc107;">
+        <p>Staff nahi hai? Delivery boy bulao:</p>
+        <button class="btn-request" onclick="alert('Company ko request bhej di gayi hai!')">🚚 A2Z Delivery Boy</button>
+    </div>
+</body>
+</html>
