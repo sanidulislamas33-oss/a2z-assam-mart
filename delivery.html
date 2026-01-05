@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A2Z Delivery App</title>
+    <style>
+        body { font-family: sans-serif; background: #eef2f3; margin: 0; padding: 15px; }
+        .task-card { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .status-badge { background: #d4edda; color: #155724; padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+        .qr-section { display: none; text-align: center; margin-top: 20px; background: #fffbe6; padding: 15px; border-radius: 10px; border: 1px dashed #ffc107; }
+        .btn-done { width: 100%; background: #007bff; color: white; border: none; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; }
+    </style>
+</head>
+<body>
+
+    <div class="task-card">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h3>📦 Naya Delivery Task</h3>
+            <span class="status-badge">Radius: 1.0 KM</span>
+        </div>
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
+        
+        <p><b>Pickup:</b> Maa Laxmi Store</p>
+        <p><b>Drop:</b> Customer (H.No. 12, 1KM Point)</p>
+        <p style="font-size: 20px; color: #b12704;"><b>Bill: <span id="bill-amt">₹0</span></b></p>
+        
+        <button class="btn-done" onclick="showPayment()">DELIVERY COMPLETE ✅</button>
+
+        <div id="payment-area" class="qr-section">
+            <p style="color:#b12704; font-weight:bold; margin-bottom: 5px;">Online Payment (Scan QR)</p>
+            <p style="font-size:12px; margin-top: 0;">Paisa seedha Vendor ke bank mein jayega</p>
+            <img id="qr-img" src="" alt="Vendor QR" style="width:180px; height:180px; border: 5px solid white; border-radius: 10px;">
+            <br><br>
+            <button onclick="location.href='index.html'" style="background:green; color:white; border:none; padding:10px 20px; border-radius:5px; font-weight:bold;">PAISA MIL GAYA</button>
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const finalBill = urlParams.get('bill') || "500";
+        document.getElementById('bill-amt').innerText = "₹" + finalBill;
+
+        function showPayment() {
+            let upiID = "vendor@upi"; 
+            let qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=${upiID}&pn=A2ZVendor&am=${finalBill}&cu=INR`;
+            document.getElementById('qr-img').src = qrUrl;
+            document.getElementById('payment-area').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
