@@ -1,4 +1,4 @@
-name: Build_Assam_Mart_Final_App_V10
+name: APK_Final_Build
 on:
   push:
     branches: [ main ]
@@ -18,5 +18,5 @@ jobs:
       - run: flutter build apk --release
       - uses: actions/upload-artifact@v3
         with:
-          name: Assam-Mart-APK
+          name: My-App-APK
           path: build/app/outputs/flutter-apk/app-release.apk
