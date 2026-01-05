@@ -1,4 +1,5 @@
-name: Build_Assam_Mart
+
+name: Build_Assam_Mart_Final
 on:
   push:
     branches: [ main ]
@@ -20,4 +21,3 @@ jobs:
         with:
           name: Assam-Mart-APK
           path: build/app/outputs/flutter-apk/app-release.apk
-  
