@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>A2Z Advanced Admin v2</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f9; padding: 15px; margin: 0; }
+        .container { max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        h2 { color: #1a73e8; text-align: center; margin-bottom: 20px; border-bottom: 2px solid #e8f0fe; padding-bottom: 10px; }
+        label { display: block; margin-top: 12px; font-weight: 600; color: #444; font-size: 14px; }
+        input, select { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ced4da; border-radius: 10px; box-sizing: border-box; font-size: 15px; }
+        .btn { background: #1a73e8; color: white; border: none; padding: 16px; width: 100%; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 25px; font-size: 16px; }
+        .loading { display: none; text-align: center; color: #1a73e8; font-weight: bold; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>A2Z Assam Mart - Master Admin</h2>
+        
+        <label>1. Category Chunein:</label>
+        <select id="category">
+            <option value="Grocery">Grocery (Ration)</option>
+            <option value="Vegetables">Sabzi / Phal</option>
+            <option value="Dairy">Dairy (Dudh, Dahi)</option>
+            <option value="Personal Care">Soap / Shampoo</option>
+            <option value="Others">Kuch Aur</option>
+        </select>
+
+        <label>2. Product ka Naam:</label>
+        <input type="text" id="name" placeholder="Jaise: Fortune Oil, Rice 5kg">
+
+        <label>3. MRP (Market Rate):</label>
+        <input type="number" id="mrp" placeholder="₹ 0.00">
+
+        <label>4. Discount (% Chhoot):</label>
+        <input type="number" id="discount" placeholder="Jaise: 10% (Optional)">
+
+        <label>5. Kharida Hua Dam (Purchase):</label>
+        <input type="number" id="buyPrice" placeholder="Aapne kitne mein kharida?">
+
+        <label>6. Bechne ka Dam (Selling):</label>
+        <input type="number" id="sellPrice" placeholder="Grahak ko kitne mein dena hai?">
+
+        <label>7. Stock Quantity (Pieces/KG):</label>
+        <input type="text" id="qty" placeholder="Jaise: 50 Pieces ya 100 KG">
+
+        <label>8. Expiry Date:</label>
+        <input type="date" id="expiry">
+
+        <label>9. Product ki HD Photo:</label>
+        <input type="file" id="photo" accept="image/*" capture="environment">
+
+        <button class="btn" id="upBtn" onclick="save()">DUKAN PAR LIVE KAREIN 🚀</button>
+        <div id="status" class="loading">HD Photo Upload ho rahi hai...</div>
+    </div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY", 
+    projectId: "a2z-assam-mart",
+    storageBucket: "a2z-assam-mart.appspot.com",
+    appId: "YOUR_APP_ID"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const storage = getStorage(app);
+
+  window.save = async () => {
+    const file = document.getElementById('photo').files[0];
+    const btn = document.getElementById('upBtn');
+    const status = document.getElementById('status');
+
+    if(!file || !document.getElementById('name').value) return alert("Photo aur Naam dalna zaroori hai!");
+
+    try {
+        btn.style.display = 'none';
+        status.style.display = 'block';
+
+        const sRef = ref(storage, 'items/' + Date.now() + "_" + file.name);
+        await uploadBytes(sRef, file);
+        const url = await getDownloadURL(sRef);
+
+        await addDoc(collection(db, "Product"), {
+          category: document.getElementById('category').value,
+          name: document.getElementById('name').value,
+          mrp: Number(document.getElementById('mrp').value),
+          discount: Number(document.getElementById('discount').value),
+          purchase_price: Number(document.getElementById('buyPrice').value),
+          selling_price: Number(document.getElementById('sellPrice').value),
+          quantity: document.getElementById('qty').value,
+          expiry_date: document.getElementById('expiry').value,
+          image: url,
+          timestamp: new Date().toISOString()
+        });
+
+        alert("Mubarak ho! Discount ke saath saaman upload ho gaya.");
+        location.reload();
+    } catch (e) {
+        alert("Error: " + e.message);
+        btn.style.display = 'block';
+        status.style.display = 'none';
+    }
+  };
+</script>
+</body>
+</html>
